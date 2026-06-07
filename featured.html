@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Featured — Pencil Therapy × SLAM 2026</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Archivo:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══ RESET ═══ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(200,146,74,.2) transparent;
+      overflow-x: hidden;
+    }
+    html::-webkit-scrollbar { width: 3px; }
+    html::-webkit-scrollbar-thumb { background: rgba(200,146,74,.2); }
+    ::selection { background: #C8924A; color: #0A0907; }
+
+    /* ═══ DESIGN TOKENS — exact match to index.html ═══ */
+    :root {
+      --base:     #0A0907;
+      --surface:  #100F0C;
+      --elevated: #181612;
+      --border:   rgba(200,146,74, 0.12);
+      --border-hi: rgba(200,146,74, 0.3);
+      --text:     #F0ECE4;
+      --muted:    rgba(240,236,228, 0.44);
+      --dim:      rgba(240,236,228, 0.14);
+      --accent:   #C8924A;
+      --acc-lo:   rgba(200,146,74, 0.07);
+      --acc-mid:  rgba(200,146,74, 0.15);
+      --serif:    'Cormorant Garamond', Georgia, serif;
+      --sans:     'Archivo', system-ui, sans-serif;
+      --expo:     cubic-bezier(0.16, 1, 0.3, 1);
+      --spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+      --pad:      clamp(1.5rem, 4.5vw, 3.5rem);
+      --max:      1280px;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--base);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      cursor: none;
+      overflow-x: hidden;
+    }
+    a, button { cursor: none; }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 9500;
+      pointer-events: none; opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ═══ CURSOR ═══ */
+    #cur {
+      position: fixed; z-index: 9999;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: width .22s var(--expo), height .22s var(--expo), background .22s;
+      will-change: left, top;
+    }
+    #cur.big {
+      width: 34px; height: 34px;
+      background: rgba(200,146,74,.12);
+      border: 1px solid rgba(200,146,74,.45);
+    }
+
+    /* ═══ FOCUS ═══ */
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    :focus:not(:focus-visible) { outline: none; }
+
+    /* ═══ NAV ═══ */
+    nav {
+      position: fixed; inset: 0 0 auto; z-index: 300;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem var(--pad);
+      background: rgba(10,9,7,.78);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .n-mark {
+      font-family: var(--sans);
+      font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(240,236,228,.5); text-decoration: none;
+      transition: color .22s;
+    }
+    .n-mark:hover, .n-mark:focus-visible { color: var(--text); }
+    .n-right { display: flex; align-items: center; gap: 1.5rem; }
+    .n-link {
+      font-family: var(--sans);
+      font-size: .57rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      transition: color .22s;
+    }
+    .n-link:hover, .n-link:focus-visible { color: var(--text); }
+    .n-link.active { color: var(--accent); }
+    .n-cta {
+      font-family: var(--sans);
+      font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); text-decoration: none;
+      border: 1px solid rgba(200,146,74,.38);
+      padding: .4rem 1rem;
+      transition: background .22s var(--expo), color .22s, border-color .22s;
+    }
+    .n-cta:hover, .n-cta:focus-visible {
+      background: var(--accent); color: var(--base); border-color: var(--accent);
+    }
+
+    /* ═══ SCROLL REVEALS ═══ */
+    [data-reveal] {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity .9s var(--expo), transform .9s var(--expo);
+    }
+    [data-reveal].vis { opacity: 1; transform: translateY(0); }
+    [data-reveal][data-d="1"] { transition-delay: .1s; }
+    [data-reveal][data-d="2"] { transition-delay: .22s; }
+    [data-reveal][data-d="3"] { transition-delay: .34s; }
+    [data-reveal][data-d="4"] { transition-delay: .48s; }
+
+    /* ═══ SHARED UTILS ═══ */
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+    .kicker {
+      display: flex; align-items: center; gap: .6rem;
+      font-family: var(--sans);
+      font-size: .52rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .kicker::before {
+      content: ''; display: block;
+      width: 1.5rem; height: 1px;
+      background: rgba(200,146,74,.55); flex-shrink: 0;
+    }
+
+    .btn-acc {
+      display: inline-flex; align-items: center; gap: .45rem;
+      font-family: var(--sans);
+      font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+      background: var(--accent); color: var(--base); font-weight: 500;
+      padding: .65rem 1.6rem; text-decoration: none; border: none;
+      transition: background .22s var(--expo), transform .18s;
+    }
+    .btn-acc:hover, .btn-acc:focus-visible { background: #D4A060; }
+    .btn-acc:active { transform: scale(.97); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .45rem;
+      font-family: var(--sans);
+      font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+      background: none; color: var(--muted);
+      border: 1px solid rgba(240,236,228,.16);
+      padding: .65rem 1.6rem; text-decoration: none;
+      transition: border-color .22s, color .22s, transform .18s;
+    }
+    .btn-ghost:hover, .btn-ghost:focus-visible {
+      border-color: rgba(240,236,228,.4); color: var(--text);
+    }
+    .btn-ghost:active { transform: scale(.97); }
+
+    /* ═══════════════════════════════
+       HERO
+    ═══════════════════════════════ */
+    .hero {
+      min-height: 100svh;
+      padding: calc(5rem + var(--pad)) var(--pad) 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      position: relative;
+      /* clip side-overflow without trapping card stack vertically */
+      overflow: visible;
+    }
+    /* Ambient glow */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 18% 55%, rgba(200,146,74,.045) 0%, transparent 52%),
+        radial-gradient(ellipse at 80% 18%, rgba(200,146,74,.022) 0%, transparent 48%);
+    }
+
+    .hero-left { position: relative; z-index: 1; }
+
+    .hero-kicker {
+      margin-bottom: 1.75rem;
+      opacity: 0; animation: fadeUp .9s var(--expo) .1s forwards;
+    }
+
+    /* Headline wrap holds SVG frame */
+    .hero-hl-wrap { position: relative; display: inline-block; }
+
+    .hero-headline {
+      font-family: var(--serif);
+      font-size: clamp(3.4rem, 8svw, 9.5rem);
+      font-weight: 300; line-height: .88; letter-spacing: -.025em;
+      color: var(--text); position: relative; z-index: 1;
+      opacity: 0; animation: fadeUp 1.1s var(--expo) .25s forwards;
+    }
+    .hero-headline em { font-style: italic; color: var(--accent); }
+
+    /* SVG frame draws around headline */
+    .hero-frame {
+      position: absolute; inset: -.7rem -1rem;
+      overflow: visible; pointer-events: none; z-index: 2;
+    }
+    .hero-frame-path {
+      fill: none;
+      stroke: rgba(200,146,74,.2);
+      stroke-width: 1; stroke-linecap: round;
+      stroke-dasharray: 1280; stroke-dashoffset: 1280;
+      animation: drawFrame 2.6s var(--expo) 1.1s forwards;
+    }
+    @keyframes drawFrame { to { stroke-dashoffset: 0; } }
+
+    .hero-sub {
+      font-family: var(--sans);
+      font-size: clamp(.78rem, 1.1vw, .92rem);
+      line-height: 1.78; color: var(--muted);
+      max-width: 440px; margin-top: 1.9rem;
+      opacity: 0; animation: fadeUp .9s var(--expo) .55s forwards;
+    }
+    .hero-sub strong { color: rgba(240,236,228,.72); font-weight: 400; }
+
+    .hero-chips {
+      display: flex; gap: .65rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      opacity: 0; animation: fadeUp .9s var(--expo) .68s forwards;
+    }
+    .chip {
+      font-family: var(--sans);
+      font-size: .5rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(200,146,74,.2);
+      background: var(--acc-lo);
+      padding: .28rem .8rem;
+    }
+
+    .hero-btns {
+      display: flex; gap: .75rem; flex-wrap: wrap;
+      margin-top: 2.4rem;
+      opacity: 0; animation: fadeUp .9s var(--expo) .82s forwards;
+    }
+
+    /* ─── Display Cards column ─── */
+    /* Hero right: offset dc-stack upward so the 3-card visual centroid */
+    /* aligns with the hero's vertical center (cards stack downward)     */
+    .dc-stack {
+      margin-top: -3rem;
+    }
+
+    .hero-right {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 320px;
+      overflow: visible;
+    }
+    /* Ambient glow backdrop — makes cards legible against dark bg */
+    .hero-right::before {
+      content: '';
+      position: absolute; inset: -120px; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 38% 48%, rgba(200,146,74,.1) 0%, transparent 65%);
+    }
+
+    /* ═══ DISPLAY CARDS ═══
+       Adapted from the React/shadcn component to native HTML+CSS.
+       Three stacked cards with skewY(-8deg) and offset transforms,
+       grayscale on back cards, hover-reveal with lift animations.
+    ═══ */
+    .dc-stack {
+      display: grid;
+      grid-template-areas: 'stack';
+      place-items: center;
+      overflow: visible;
+      /* delay fade-in until after hero text */
+      opacity: 0; animation: fadeUp .9s var(--expo) .3s forwards;
+    }
+
+    .dc-card {
+      grid-area: stack;
+      position: relative;
+      width: 22rem; height: 9.25rem;
+      border-radius: .75rem;
+      border: 1px solid rgba(200,146,74,.55);
+      /* Amber-tinted dark surface — distinctly visible on #0A0907 */
+      background-color: rgba(200,146,74,.18);
+      background-image: none;
+      box-shadow:
+        0 0 0 1px rgba(200,146,74,.08),
+        0 8px 32px rgba(0,0,0,.6);
+      padding: .9rem 1.1rem;
+      display: flex; flex-direction: column; justify-content: space-between;
+      user-select: none;
+      overflow: hidden;
+      transition: transform .7s var(--expo), border-color .3s;
+    }
+    .dc-card:hover {
+      border-color: rgba(200,146,74,.85);
+    }
+
+    /* Right-edge gradient fade — reveals the stacked card behind */
+    .dc-card::after {
+      content: '';
+      position: absolute; right: -1px; top: -5%;
+      height: 110%; width: 8rem;
+      background: linear-gradient(to left, var(--base), transparent);
+      pointer-events: none; z-index: 10;
+    }
+
+    /* Depth overlay on back cards */
+    .dc-card::before {
+      content: '';
+      position: absolute; inset: 0; border-radius: inherit;
+      background: rgba(10,9,7,.18);
+      pointer-events: none; z-index: 5;
+      transition: opacity .5s var(--expo);
+    }
+
+    .dc-row    { display: flex; align-items: center; gap: .55rem; position: relative; z-index: 6; }
+    .dc-icon   {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.5rem; height: 1.5rem; border-radius: 50%;
+      background: rgba(200,146,74,.18); flex-shrink: 0;
+    }
+    .dc-icon svg { width: .72rem; height: .72rem; }
+    .dc-title  {
+      font-family: var(--sans);
+      font-size: .82rem; font-weight: 500; color: var(--accent);
+    }
+    .dc-desc   {
+      font-family: var(--sans);
+      font-size: .9rem; line-height: 1.25; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      position: relative; z-index: 6;
+    }
+    .dc-date   {
+      font-family: var(--sans);
+      font-size: .55rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); position: relative; z-index: 6;
+    }
+
+    /* Card 1 — back */
+    .dc-1 {
+      transform: skewY(-8deg);
+      z-index: 1;
+    }
+    .dc-1:hover {
+      transform: skewY(-8deg) translateY(-2.5rem);
+    }
+    .dc-1:hover::before { opacity: 0; }
+
+    /* Card 2 — middle */
+    .dc-2 {
+      transform: skewY(-8deg) translate(4rem, 2.5rem);
+      z-index: 2;
+    }
+    .dc-2:hover {
+      transform: skewY(-8deg) translate(4rem, -.25rem);
+    }
+    .dc-2:hover::before { opacity: 0; }
+
+    /* Card 3 — front: most offset, no overlay */
+    .dc-3 {
+      transform: skewY(-8deg) translate(8rem, 5rem);
+      z-index: 3;
+      /* front card: slightly brighter border */
+      border-color: rgba(200,146,74,.7);
+    }
+    .dc-3::before { opacity: 0; }
+    .dc-3:hover {
+      transform: skewY(-8deg) translate(8rem, 7.5rem);
+    }
+
+    /* ═══════════════════════════════
+       RULE / DIVIDER
+    ═══════════════════════════════ */
+    .rule { border: none; border-top: 1px solid var(--border); }
+
+    /* ═══════════════════════════════
+       ARTWORK SECTION
+    ═══════════════════════════════ */
+    .artwork-section {
+      background: var(--surface);
+      padding: clamp(5rem, 10svh, 9rem) var(--pad);
+      scroll-margin-top: 4.5rem; /* clear the fixed nav on anchor scroll */
+    }
+
+    .artwork-wrap { max-width: 860px; margin: 0 auto; }
+
+    .artwork-kicker { margin-bottom: 3.5rem; }
+
+    /* Mat / frame treatment — gallery wall */
+    .artwork-mat {
+      position: relative;
+      background: rgba(16,15,12,.92);
+      padding: 2rem;
+      border: 1px solid rgba(200,146,74,.09);
+      box-shadow:
+        0 0 0 1px rgba(200,146,74,.05),
+        0 40px 90px rgba(0,0,0,.72),
+        0 0 140px rgba(200,146,74,.03);
+    }
+    /* Inner inset line (mat edge) */
+    .artwork-mat::before {
+      content: '';
+      position: absolute; inset: .75rem;
+      border: 1px solid rgba(200,146,74,.07);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* Gallery spotlight reveal */
+    .artwork-img {
+      display: block;
+      width: 100%;
+      height: auto;        /* preserve natural aspect ratio */
+      max-height: 80vh;    /* never taller than viewport */
+      object-fit: contain; /* never distorts */
+      position: relative; z-index: 1;
+      opacity: 0;
+      transform: scale(1.025);
+      filter: brightness(.5) contrast(.9);
+      transition:
+        opacity  1.5s var(--expo),
+        transform 1.7s var(--expo),
+        filter   1.7s var(--expo);
+    }
+    .artwork-img.lit {
+      opacity: 1; transform: scale(1);
+      filter: brightness(.92) contrast(1.04);
+    }
+
+    /* Vignette overlay */
+    .artwork-vignette {
+      position: absolute;
+      inset: .75rem;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(10,9,7,.28) 100%);
+      pointer-events: none; z-index: 2;
+      mix-blend-mode: multiply;
+    }
+
+    /* Museum placard */
+    .placard {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem;
+      padding: 1.4rem 0 0;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    .placard-title {
+      font-family: var(--serif);
+      font-size: 1.4rem; font-weight: 400; font-style: italic;
+      color: var(--text); line-height: 1.15;
+    }
+    .placard-title small {
+      display: block;
+      font-family: var(--sans);
+      font-size: .52rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--accent); font-style: normal;
+      margin-bottom: .3rem;
+    }
+    .placard-meta {
+      font-family: var(--sans);
+      font-size: .52rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); text-align: right; line-height: 2;
+      flex-shrink: 0;
+    }
+    .placard-meta span { color: var(--accent); }
+
+    /* ═══════════════════════════════
+       STATEMENT
+    ═══════════════════════════════ */
+    .statement-section {
+      padding: clamp(6rem, 12svh, 10rem) var(--pad);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .statement-section::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, rgba(200,146,74,.04) 0%, transparent 68%);
+    }
+    .statement-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+
+    .statement-mark {
+      display: block;
+      font-family: var(--serif);
+      font-size: 5.5rem; line-height: .45;
+      color: rgba(200,146,74,.12); margin-bottom: 1.4rem;
+      pointer-events: none; user-select: none;
+    }
+
+    .statement-quote {
+      font-family: var(--serif);
+      font-size: clamp(1.7rem, 3.8svw, 3.5rem);
+      font-weight: 300; line-height: 1.25; letter-spacing: -.02em;
+      color: var(--text);
+    }
+    .statement-quote em { font-style: italic; color: var(--accent); }
+
+    .statement-attr {
+      font-family: var(--sans);
+      font-size: .55rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--dim); margin-top: 2.75rem;
+    }
+
+    /* ═══════════════════════════════
+       CREDENTIAL BLOCK
+    ═══════════════════════════════ */
+    .cred-section {
+      background: var(--surface);
+      padding: clamp(5rem, 10svh, 9rem) var(--pad);
+      border-top: 1px solid var(--border);
+    }
+
+    .cred-head { margin-bottom: 3rem; }
+    .cred-h2 {
+      font-family: var(--serif);
+      font-size: clamp(2.6rem, 6svw, 5.5rem);
+      font-weight: 300; letter-spacing: -.025em; line-height: .9;
+      color: var(--text); margin-top: .9rem;
+    }
+    .cred-h2 em { font-style: italic; color: var(--accent); }
+
+    /* 2-col grid with hairline dividers */
+    .cred-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 2.5rem;
+    }
+    .cred-cell {
+      background: var(--surface);
+      padding: 1.75rem 1.5rem;
+    }
+    .cred-label {
+      font-family: var(--sans);
+      font-size: .46rem; letter-spacing: .16em; text-transform: uppercase;
+      color: rgba(200,146,74,.72); margin-bottom: .45rem;
+    }
+    .cred-val {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-weight: 400; line-height: 1.3;
+      color: var(--text);
+    }
+
+    /* SLAM external link card */
+    .slam-link {
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      padding: 2rem 1.8rem;
+      border: 1px solid var(--border);
+      background: var(--acc-lo);
+      text-decoration: none;
+      transition: border-color .3s var(--expo), background .3s;
+    }
+    .slam-link:hover, .slam-link:focus-visible {
+      border-color: var(--border-hi); background: rgba(200,146,74,.1);
+    }
+    .slam-kicker {
+      font-family: var(--sans);
+      font-size: .5rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: .4rem;
+    }
+    .slam-title {
+      font-family: var(--serif);
+      font-size: 1.45rem; font-weight: 400; color: var(--text); line-height: 1.15;
+    }
+    .slam-body {
+      font-family: var(--sans);
+      font-size: .76rem; line-height: 1.7; color: var(--muted); margin-top: .35rem;
+      max-width: 440px;
+    }
+    .slam-arrow {
+      width: 3rem; height: 3rem; border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); flex-shrink: 0;
+      transition: border-color .25s, color .25s, transform .4s var(--expo);
+    }
+    .slam-link:hover .slam-arrow, .slam-link:focus-visible .slam-arrow {
+      border-color: var(--accent); color: var(--accent); transform: rotate(-45deg);
+    }
+
+    .integrity-note {
+      font-family: var(--sans);
+      font-size: .58rem; line-height: 1.8;
+      color: var(--dim); margin-top: 1.75rem; max-width: 540px;
+    }
+
+    /* ═══════════════════════════════
+       CTA SECTION
+    ═══════════════════════════════ */
+    .cta-section {
+      padding: clamp(6rem, 12svh, 10rem) var(--pad);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 60%, rgba(200,146,74,.055) 0%, transparent 58%);
+    }
+    .cta-inner { max-width: 540px; margin: 0 auto; position: relative; z-index: 1; }
+    .cta-title {
+      font-family: var(--serif);
+      font-size: clamp(3.2rem, 7svw, 7rem);
+      font-weight: 300; line-height: .91; letter-spacing: -.025em;
+      color: var(--text); margin: 1.4rem 0 1.6rem;
+    }
+    .cta-title em { font-style: italic; color: var(--accent); }
+    .cta-sub {
+      font-family: var(--sans);
+      font-size: .9rem; line-height: 1.78; color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+    .cta-btns { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ═══════════════════════════════
+       FOOTER
+    ═══════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem var(--pad);
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .f-mark {
+      font-family: var(--sans);
+      font-size: .52rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--dim);
+    }
+    .f-links { display: flex; gap: 2rem; list-style: none; }
+    .f-links a {
+      font-family: var(--sans);
+      font-size: .52rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--dim); text-decoration: none;
+      transition: color .22s;
+    }
+    .f-links a:hover, .f-links a:focus-visible { color: var(--muted); }
+
+    /* ═══ KEYFRAMES ═══ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 3.5rem;
+        min-height: auto;
+        padding-bottom: 4rem;
+      }
+      .hero-right { justify-content: flex-start; }
+      .cred-grid { grid-template-columns: 1fr; }
+      .slam-link { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+      .placard { flex-direction: column; align-items: flex-start; }
+      .placard-meta { text-align: left; }
+    }
+    @media (max-width: 520px) {
+      .hero-btns { flex-direction: column; align-items: flex-start; }
+      .hero-right { display: none; }
+      .artwork-mat { padding: 1rem 1rem 0; }
+      .artwork-mat::before { inset: .5rem .5rem 0; }
+    }
+
+    /* ═══ REDUCED MOTION ═══ */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-kicker,
+      .hero-headline,
+      .hero-sub,
+      .hero-chips,
+      .hero-btns,
+      .dc-stack { animation: none !important; opacity: 1 !important; }
+      .hero-frame-path { animation: none; stroke-dashoffset: 0; }
+      .artwork-img { opacity: 1; transform: none; filter: none; transition: none; }
+      #cur { display: none; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="feat-wipe" aria-hidden="true" style="
+  position:fixed;inset:0;z-index:9000;
+  background:var(--base);
+  transform:scaleX(0);transform-origin:left;
+  pointer-events:none;
+"></div>
+<div id="cur" aria-hidden="true"></div>
+
+<!-- ─── NAV ─── -->
+<nav aria-label="Site navigation">
+  <a href="index.html" class="n-mark" aria-label="Pencil Therapy home">pencil therapy</a>
+  <div class="n-right">
+    <a href="tiktok.html"   class="n-link">TikTok</a>
+    <a href="featured.html" class="n-link active" aria-current="page">Featured</a>
+    <a href="https://www.tiktok.com/@pencil.therapy" target="_blank" rel="noopener noreferrer" class="n-cta">Follow ↗</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════
+     HERO
+═══════════════════════════════ -->
+<section class="hero" aria-label="Featured announcement">
+
+  <!-- Left: text -->
+  <div class="hero-left">
+
+    <p class="hero-kicker kicker">As seen at</p>
+
+    <div class="hero-hl-wrap">
+      <!-- SVG frame traces around headline on load -->
+      <svg class="hero-frame" viewBox="0 0 400 230" preserveAspectRatio="none" aria-hidden="true">
+        <rect class="hero-frame-path" x="1" y="1" width="398" height="228" rx="1"/>
+      </svg>
+      <h1 class="hero-headline">
+        <em>Saint Louis</em><br>
+        Art Museum
+      </h1>
+    </div>
+
+    <p class="hero-sub">
+      Selected for the <strong>14th Annual Young Artists Exhibition</strong>, themed
+      <strong>"The Edge of What's Next"</strong>. On view in the Student Gallery beginning May 1, 2026.
+    </p>
+
+    <div class="hero-chips">
+      <span class="chip">Opens May 1, 2026</span>
+      <span class="chip">Student Gallery</span>
+      <span class="chip">Forest Park · St. Louis</span>
+    </div>
+
+    <div class="hero-btns">
+      <a class="btn-acc" href="https://www.slam.org/young-artists-exhibition/" target="_blank" rel="noopener noreferrer">
+        View Exhibition ↗
+      </a>
+      <a class="btn-ghost" href="#artwork">See the Piece ↓</a>
+    </div>
+
+  </div>
+
+  <!-- Right: DisplayCards (adapted from React/shadcn to native HTML+CSS) -->
+  <!-- SWAP — fill in your own card content below -->
+  <div class="hero-right" aria-hidden="true">
+    <div class="dc-stack">
+
+      <!-- Card 1 — back (Annual Exhibition) -->
+      <div class="dc-card dc-1">
+        <div class="dc-row">
+          <span class="dc-icon">
+            <!-- Calendar / Lucide-style icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8924A" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8"  y1="2" x2="8"  y2="6"/>
+              <line x1="3"  y1="10" x2="21" y2="10"/>
+            </svg>
+          </span>
+          <span class="dc-title">14th Annual</span>
+        </div>
+        <p class="dc-desc">Young Artists Exhibition</p>
+        <p class="dc-date">SLAM · Ages 13 – 19 · Juried</p>
+      </div>
+
+      <!-- Card 2 — middle (Theme) -->
+      <div class="dc-card dc-2">
+        <div class="dc-row">
+          <span class="dc-icon">
+            <!-- Star / sparkle -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8924A" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </span>
+          <span class="dc-title">Theme</span>
+        </div>
+        <p class="dc-desc">"The Edge of What's Next"</p>
+        <p class="dc-date">Interactive artwork · Teen Arts Council</p>
+      </div>
+
+      <!-- Card 3 — front (Selected) -->
+      <div class="dc-card dc-3">
+        <div class="dc-row">
+          <span class="dc-icon">
+            <!-- Check / selected -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8924A" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </span>
+          <span class="dc-title">Selected</span>
+        </div>
+        <p class="dc-desc">Saint Louis Art Museum</p>
+        <p class="dc-date">May 1, 2026 · Forest Park, St. Louis</p>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<hr class="rule">
+
+<!-- ═══════════════════════════════
+     ARTWORK — gallery spotlight
+═══════════════════════════════ -->
+<section class="artwork-section" id="artwork" aria-label="The selected artwork">
+  <div class="artwork-wrap">
+
+    <p class="kicker artwork-kicker" data-reveal>The Selected Work</p>
+
+    <!-- Gallery mat / frame -->
+    <div class="artwork-mat" data-reveal data-d="2">
+      <!-- SWAP: replace src with your hi-res artwork image -->
+      <img
+        class="artwork-img"
+        src="blob_https___web.whatsapp.com_4cc790e8-bceb-490f-b1ab-1051b1fbae33.png"
+        alt="Between Selves — a figure ascending an endless staircase beneath a burning sun, pencil on paper, 2025. Selected for the 14th Annual Young Artists Exhibition at the Saint Louis Art Museum."
+        loading="lazy"
+      >
+      <div class="artwork-vignette" aria-hidden="true"></div>
+    </div>
+
+    <!-- Museum-style placard caption -->
+    <div class="placard" data-reveal data-d="3">
+      <div class="placard-title">
+        <!-- SWAP: your artwork title -->
+        <small>Selected Work · SLAM 2026</small>
+        Between Selves
+      </div>
+      <p class="placard-meta">
+        <!-- SWAP: medium & year -->
+        Pencil on paper<br>
+        2025<br>
+        <span>SLAM · Student Gallery</span>
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ═══════════════════════════════
+     ARTIST STATEMENT
+═══════════════════════════════ -->
+<section class="statement-section" aria-label="Artist statement">
+  <div class="statement-inner">
+    <span class="statement-mark" aria-hidden="true">"</span>
+    <!-- SWAP: your 2–3 sentence statement -->
+    <blockquote class="statement-quote" data-reveal>
+      I draw because I have to. Because the page holds things I don't have words for.
+      Because <em>the figure keeps climbing</em> — and that's exactly the edge
+      I want to live on.
+    </blockquote>
+    <p class="statement-attr" data-reveal data-d="2">
+      — @pencil.therapy &nbsp;·&nbsp; Artist Statement &nbsp;·&nbsp; 2026
+    </p>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ═══════════════════════════════
+     CREDENTIAL BLOCK
+═══════════════════════════════ -->
+<section class="cred-section" aria-label="Exhibition credentials">
+  <div class="wrap">
+
+    <div class="cred-head" data-reveal>
+      <p class="kicker">Exhibition Details</p>
+      <h2 class="cred-h2">The <em>Credential</em></h2>
+    </div>
+
+    <div class="cred-grid" data-reveal data-d="2">
+      <div class="cred-cell">
+        <p class="cred-label">Institution</p>
+        <p class="cred-val">Saint Louis Art Museum</p>
+      </div>
+      <div class="cred-cell">
+        <p class="cred-label">Exhibition</p>
+        <p class="cred-val">14th Annual Young Artists Exhibition</p>
+      </div>
+      <div class="cred-cell">
+        <p class="cred-label">Theme</p>
+        <p class="cred-val">"The Edge of What's Next"</p>
+      </div>
+      <div class="cred-cell">
+        <p class="cred-label">Venue</p>
+        <p class="cred-val">Student Gallery · Forest Park</p>
+      </div>
+      <div class="cred-cell">
+        <p class="cred-label">Opening Reception</p>
+        <p class="cred-val">Friday, May 1, 2026</p>
+      </div>
+      <div class="cred-cell">
+        <p class="cred-label">Eligibility</p>
+        <p class="cred-val">Juried · St. Louis-area teens, ages 13 – 19</p>
+      </div>
+    </div>
+
+    <!-- External SLAM link — opens in new tab for verification -->
+    <a class="slam-link" href="https://www.slam.org/young-artists-exhibition/"
+       target="_blank" rel="noopener noreferrer" data-reveal data-d="3"
+       aria-label="Visit the official SLAM Young Artists Exhibition page (opens in new tab)">
+      <div>
+        <p class="slam-kicker">Official Source &nbsp;·&nbsp; slam.org</p>
+        <p class="slam-title">SLAM Young Artists Exhibition</p>
+        <p class="slam-body">
+          Visit the official page at slam.org to learn more about the exhibition,
+          view participating artists, and plan your visit to the museum in Forest Park.
+        </p>
+      </div>
+      <div class="slam-arrow" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 13L13 3M13 3H6M13 3V10"
+                stroke="currentColor" stroke-width="1.3"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </a>
+
+    <p class="integrity-note" data-reveal data-d="4">
+      This page celebrates the selection of this artwork for the exhibition. The Saint Louis Art Museum's
+      name is used as a factual credit only — it does not imply museum endorsement, representation,
+      or sale of the artist's other work. Link above goes to the official SLAM page for verification.
+    </p>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     CTA
+═══════════════════════════════ -->
+<section class="cta-section" aria-label="Return to portfolio">
+  <div class="cta-inner">
+    <div data-reveal>
+      <p class="kicker" style="justify-content: center;">The Work Continues</p>
+      <h2 class="cta-title">Back to<br>the <em>Practice</em></h2>
+      <p class="cta-sub">One drawing at a time. Follow along as the work grows — a new piece every week.</p>
+      <div class="cta-btns">
+        <!-- SWAP: update href to wherever you want the button to go -->
+        <a class="btn-acc" href="index.html">← View All Work</a>
+        <a class="btn-ghost" href="https://www.tiktok.com/@pencil.therapy"
+           target="_blank" rel="noopener noreferrer">Follow on TikTok ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <span class="f-mark">© 2025 Pencil Therapy &nbsp;·&nbsp; art as medicine</span>
+  <ul class="f-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tiktok.html">TikTok</a></li>
+    <li><a href="featured.html" aria-current="page">Featured</a></li>
+    <li><a href="https://www.tiktok.com/@pencil.therapy" target="_blank" rel="noopener noreferrer">Follow ↗</a></li>
+  </ul>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── CURSOR ── */
+  const cur = document.getElementById('cur');
+  let cx = -100, cy = -100, isTouch = false;
+  document.addEventListener('touchstart', () => { isTouch = true; cur.style.display = 'none'; }, { once: true });
+  document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; });
+  (function tick() { cur.style.left = cx + 'px'; cur.style.top = cy + 'px'; requestAnimationFrame(tick); })();
+  document.querySelectorAll('a, button, .dc-card, .slam-link').forEach(el => {
+    el.addEventListener('mouseenter', () => { if (!isTouch) cur.classList.add('big'); });
+    el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+  });
+
+  const rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── PAGE WIPE (featured → other pages) ── */
+  const featWipe = document.getElementById('feat-wipe');
+  function wipeNav(href) {
+    if (rm) { window.location.href = href; return; }
+    featWipe.style.cssText += ';pointer-events:auto;animation:featWipeIn .46s cubic-bezier(.16,1,.3,1) forwards;';
+    setTimeout(() => { window.location.href = href; }, 430);
+  }
+  // Inject keyframes
+  const wipeStyle = document.createElement('style');
+  wipeStyle.textContent = '@keyframes featWipeIn{from{transform:scaleX(0);transform-origin:left}to{transform:scaleX(1);transform-origin:left}}';
+  document.head.appendChild(wipeStyle);
+
+  // Wire TikTok nav link
+  const ttNavLink = document.querySelector('a.n-link[href="tiktok.html"]');
+  if (ttNavLink) ttNavLink.addEventListener('click', e => { e.preventDefault(); wipeNav('tiktok.html'); });
+
+  // Wire Home link
+  const homeLink = document.querySelector('a.n-mark[href="index.html"]');
+  if (homeLink) homeLink.addEventListener('click', e => { e.preventDefault(); wipeNav('index.html'); });
+
+  /* ── SCROLL REVEALS ── */
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('[data-reveal]').forEach(el => {
+    if (rm) el.classList.add('vis');
+    else revObs.observe(el);
+  });
+
+  /* ── GALLERY SPOTLIGHT REVEAL ── */
+  const artImg = document.querySelector('.artwork-img');
+  if (artImg) {
+    if (rm) {
+      artImg.classList.add('lit');
+    } else {
+      const spotObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            setTimeout(() => artImg.classList.add('lit'), 250);
+            spotObs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      spotObs.observe(artImg);
+    }
+  }
+
+}());
+</script>
+
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  PENCIL THERAPY — FEATURED PAGE (SLAM 2026)                  ║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║  NOTE: This is a plain HTML/CSS/JS project.                  ║
+  ║  The DisplayCards component (originally React + shadcn/ui)   ║
+  ║  has been adapted to native CSS grid stacking.               ║
+  ║                                                              ║
+  ║  To use the original React version you would need:           ║
+  ║    npx create-next-app@latest --typescript --tailwind        ║
+  ║    npx shadcn@latest init                                    ║
+  ║    npm install lucide-react                                  ║
+  ║  Then place display-cards.tsx in /components/ui/             ║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║  FONTS                                                       ║
+  ║    Display:  Cormorant Garamond (300 · 400 · 600 · italic)   ║
+  ║    Body:     Archivo (300 · 400 · 500)                       ║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║  PALETTE                                                     ║
+  ║    Base:     #0A0907  (warm near-black)                      ║
+  ║    Surface:  #100F0C                                         ║
+  ║    Elevated: #181612                                         ║
+  ║    Text:     #F0ECE4  (warm off-white)                       ║
+  ║    Accent:   #C8924A  (warm brass)                           ║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║  SWAP YOUR CONTENT                                           ║
+  ║    • Artwork image: .artwork-img src=""                      ║
+  ║    • Artwork title: .placard-title                           ║
+  ║    • Medium & year: .placard-meta                            ║
+  ║    • Artist statement: blockquote.statement-quote            ║
+  ║    • CTA href: .cta-btns .btn-acc href                       ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
+</body>
+</html>

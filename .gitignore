@@ -1,0 +1,21 @@
+# Temporary screenshots
+temporary screenshots/
+
+# Reference images (WhatsApp blobs)
+blob_https___*
+
+# Reference screenshots
+blit.studio_.png
+noomoagency.com_.png
+www.sui.io_.png
+
+# ZIP archives
+*.zip
+
+# Skill/prompt files
+SKILL*.md
+tiktok-page-build-prompt.md
+
+# Debug/utility scripts
+snap-debug.mjs
+snap-sections.mjs
